@@ -1,3 +1,22 @@
+<?php include "other/dbcon.php"; ?>
+
+
+<?php
+
+if($_SERVER['REQUEST_METHOD']=='GET')
+{
+    $compName = gethostbyaddr($_SERVER["REMOTE_ADDR"]);
+    $ip = $_SERVER["REMOTE_ADDR"];
+
+    $sql="INSERT INTO `onlyvisit` (`sl`, `comp`, `ip`, `date_and_time`) VALUES (NULL, '$compName', '$ip', current_timestamp())";
+    
+    $result=mysqli_query($conn,$sql);
+
+
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,14 +24,17 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
+  <link rel="icon" type="image" href="/assets/img/sc.ico">
   <title>Suvendu Chowdhury</title>
-  <meta content="" name="description">
-  <meta content="" name="keywords">
+  <link rel="icon" type="image" href="/assets/img/sc.ico">
+  <meta content="I am Suvendu Chowdhury and I am a passionate Python coder, but who has a good command in Javascript, JQuery,Servlets and JSP, Spring Framework, MongoDB Also I am a student and an enthusiastic techie." name="description">
+  <meta content="I am Suvendu Chowdhury and I am a passionate Python coder, but who has a good command in Javascript, JQuery,Servlets and JSP, Spring Framework, MongoDB Also I am a student and an enthusiastic techie." name="keywords">
 
   <!-- Favicons -->
   <link
     href="https://scontent.fccu31-1.fna.fbcdn.net/v/t39.30808-6/246785639_206881338216501_5896698526592944398_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=rplM5LVGHYAAX-p0Vn3&tn=bjXQtzcJERlD20vK&_nc_ht=scontent.fccu31-1.fna&oh=00_AfB4Z-Vw8fD52Nio_QH24BFTM1PpjVt6KT_AfagiGtfi1A&oe=63D30DF6"
     rel="icon">
+
   <link
     href="https://scontent.fccu31-1.fna.fbcdn.net/v/t39.30808-6/246785639_206881338216501_5896698526592944398_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=rplM5LVGHYAAX-p0Vn3&tn=bjXQtzcJERlD20vK&_nc_ht=scontent.fccu31-1.fna&oh=00_AfB4Z-Vw8fD52Nio_QH24BFTM1PpjVt6KT_AfagiGtfi1A&oe=63D30DF6"
     rel="apple-touch-icon">
@@ -39,6 +61,8 @@
   * Author: BootstrapMade.com
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
+  <link rel="icon" type="image" href="/assets/img/sc.ico">
+
 </head>
 
 <body>
@@ -154,20 +178,31 @@
         </div>
 
         <div class="row no-gutters">
+        <?php
+               $sql="SELECT * FROM `onlyvisit`";
+               $result=mysqli_query($conn,$sql);
+               
+               $numV=mysqli_num_rows($result);
+          ?>
 
           <div class="col-lg-3 col-md-6 d-md-flex align-items-md-stretch" data-aos="fade-up">
             <div class="count-box">
               <i class="bi bi-emoji-smile"></i>
-              <span data-purecounter-start="0" data-purecounter-end="232" data-purecounter-duration="1"
+              <span data-purecounter-start="0" data-purecounter-end="<?php echo $numV; ?>" data-purecounter-duration="1"
                 class="purecounter"></span>
               <p><strong>Profile Visitors</strong></p>
             </div>
           </div>
-
+          <?php
+               $sql="SELECT * FROM `projects`";
+               $result=mysqli_query($conn,$sql);
+               
+               $numP=mysqli_num_rows($result);
+          ?>
           <div class="col-lg-3 col-md-6 d-md-flex align-items-md-stretch" data-aos="fade-up" data-aos-delay="100">
             <div class="count-box">
               <i class="bi bi-journal-richtext"></i>
-              <span data-purecounter-start="0" data-purecounter-end="50" data-purecounter-duration="1"
+              <span data-purecounter-start="0" data-purecounter-end="<?php echo $numP; ?>" data-purecounter-duration="1"
                 class="purecounter"></span>
               <p><strong>Number of Projects</strong></p>
             </div>
@@ -246,7 +281,7 @@
             </div>
 
             <div class="progress">
-              <span class="skill">Java <i class="val">80%</i></span>
+              <span class="skill">Advanced Java <i class="val">80%</i></span>
               <div class="progress-bar-wrap">
                 <div class="progress-bar" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100">
                 </div>
@@ -379,14 +414,39 @@
         </div> 
 
           <div class="row" data-aos-delay="100" data-aos="fade-up">
-            <div class="col-sm-4" >
-                <div class="card m-2 ">
-                    <img src="data:image/png;base64,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" alt="" class="card-img-top" height="200px">
-                    <div class="card-footer my-3 mx-2"><small class="text-muted">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Vitae, minus cupiditate! Minus impedit eum voluptates fugiat nam blanditiis libero maxime non quisquam, repellendus sit eveniet qui necessitatibus aliquam ullam asperiores.</small></div>
-                    <a href="#" class="btn btn-primary my-1 mx-2">Livedemo</a>
-                    <a href="#" class="btn btn-danger my-3 mx-2">Git repo</a>
-                </div>
-            </div>
+            <?php
+                  $sql="SELECT * FROM `projects`";
+                  $result=mysqli_query($conn,$sql);
+                  
+                  $num=mysqli_num_rows($result);
+                  // echo $num;
+                  $text="Just Text";
+
+                  for($i=0;$i<$num;$i++){
+                    $row=mysqli_fetch_assoc($result);
+
+                      echo '<div class="col-sm-4" >
+                      <div class="card m-2 ">
+                      <h3>'.$row['pname'].'</h3>
+                          <img src="'.$row['imgProject'].'" alt="" class="card-img-top" height="200px">
+                          <div class="card-footer my-3 mx-2"><small class="text-muted">'.$row['paragraph'].'</small></div>
+                          ';
+                          if ($row['git']!=''){
+                            echo '<a href="'.$row['git'].'" class="btn btn-danger my-3 mx-2">Git repo</a>';
+                            
+                          }
+
+                          if($row['live']!=''){
+                            echo '<a href="'.$row['live'].'" class="btn btn-primary  mx-2">Live demo</a>';
+                          }                         
+
+                      echo '</div>
+                      </div>';
+
+
+                  }
+            ?>
+     
             
         </div>
         
@@ -430,35 +490,38 @@
 
           </div>
 
-          <div class="col-lg-7 mt-5 mt-lg-0 d-flex align-items-stretch">
-            <form action="forms/contact.php" method="post" role="form" class="php-email-form">
+          <div class="col-lg-7 mt-5 mt-lg-0 d-flex align-items-stretch ">
+
+          <div class="php-email-form">
+
+        
+        
+<!-- 
+          <form action="index.php/#contact" method="get" >
               <div class="row">
                 <div class="form-group col-md-6">
                   <label for="name">Your Name</label>
                   <input type="text" name="name" class="form-control" id="name" required>
                 </div>
                 <div class="form-group col-md-6">
-                  <label for="name">Your Email</label>
+                  <label for="email">Your Email</label>
                   <input type="email" class="form-control" name="email" id="email" required>
                 </div>
               </div>
               <div class="form-group">
-                <label for="name">Subject</label>
+                <label for="subject">Subject</label>
                 <input type="text" class="form-control" name="subject" id="subject" required>
               </div>
               <div class="form-group">
-                <label for="name">Message</label>
+                <label for="message">Message</label>
                 <textarea class="form-control" name="message" rows="10" required></textarea>
               </div>
-              <div class="my-3">
-                <div class="loading">Loading</div>
-                <div class="error-message"></div>
-                <div class="sent-message">Your message has been sent. Thank you!</div>
-              </div>
-              <div class="text-center"><button type="submit">Send Message</button></div>
+              <input class="text-center btn btn-primary" type="submit" value="Send Message">
+    
             </form>
-          </div>
+          </div> -->
 
+        </div>
         </div>
 
       </div>
